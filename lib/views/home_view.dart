@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pemindang_coba/utils/my_utils.dart';
 import 'package:pemindang_coba/viewmodels/home_view_model.dart';
 import 'package:pemindang_coba/views/auction_detail_view.dart';
+import 'package:pemindang_coba/views/deposit_view.dart';
 import 'package:pemindang_coba/views/profile_view.dart';
 import 'package:pemindang_coba/views/transactions_view.dart';
+import 'package:pemindang_coba/views/transfer_view.dart';
 import 'package:pemindang_coba/views/widgets/auction_card.dart';
 import 'package:pemindang_coba/views/widgets/menu_button.dart';
+import 'package:pemindang_coba/views/withdrawal_view.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
@@ -87,26 +90,33 @@ class HomeView extends StackedView<HomeViewModel> {
                   iconData: Icons.add_circle_outline,
                   label: 'Setor',
                   color: Colors.blue.shade900,
-                  onTap: () => MyUtils.showSnackbar(context, 'Unavailable'),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const DepositView(),
+                  )),
                 ),
                 MenuButton(
                   iconData: Icons.arrow_circle_right_outlined,
                   label: 'Kirim',
                   color: Colors.blue.shade900,
-                  onTap: () => MyUtils.showSnackbar(context, 'Unavailable'),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const TransferView(),
+                  )),
                 ),
                 MenuButton(
                   iconData: Icons.arrow_circle_down_outlined,
                   label: 'Tarik',
                   color: Colors.blue.shade900,
-                  onTap: () => MyUtils.showSnackbar(context, 'Unavailable'),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const WithdrawalView(),
+                  )),
                 ),
                 MenuButton(
                   iconData: Icons.history,
                   label: 'Riwayat',
                   color: Colors.blue.shade900,
                   onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const TransactionsView())),
+                    builder: (_) => const TransactionsView(),
+                  )),
                 ),
               ],
             ),

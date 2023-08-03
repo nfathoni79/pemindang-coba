@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pemindang_coba/app/locator.dart';
 import 'package:pemindang_coba/models/auction.dart';
+import 'package:pemindang_coba/models/bank.dart';
+import 'package:pemindang_coba/models/deposit.dart';
 import 'package:pemindang_coba/models/seaseed_user.dart';
 import 'package:pemindang_coba/models/store.dart';
 import 'package:pemindang_coba/models/transaction.dart';
 import 'package:pemindang_coba/models/user.dart';
 import 'package:pemindang_coba/models/user_token.dart';
+import 'package:pemindang_coba/models/withdrawal.dart';
 import 'package:pemindang_coba/services/prefs_service.dart';
 
 class LioService {
@@ -183,6 +186,160 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get Seaseed user.';
+    throw Exception(message);
+  }
+
+  /// Get other Seaseed users except current one.
+  Future<List<SeaseedUser>> getOtherSeaseedUsers() async {
+    String? token = await _prefsService.getAccessToken();
+    if (token == null) throw Exception('Failed to get token.');
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/seaseed/users/others/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = jsonDecode(response.body);
+      List users = body['users'];
+
+      return users.map((user) => SeaseedUser.fromJson(user)).toList();
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return getOtherSeaseedUsers();
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to get other users.';
+    throw Exception(message);
+  }
+
+  /// Create a deposit.
+  Future<Deposit> createDeposit(int amount) async {
+    String? token = await _prefsService.getAccessToken();
+    if (token == null) throw Exception('Failed to get token.');
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/seaseed/deposits/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+      body: {
+        'amount': '$amount',
+      },
+    );
+
+    if (response.statusCode == 201) {
+      Map<String, dynamic> body = jsonDecode(response.body);
+      return Deposit.fromJson(body['deposit']);
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return createDeposit(amount);
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to create deposit.';
+    throw Exception(message);
+  }
+
+  /// Create a withdrawal.
+  Future<Withdrawal> createWithdrawal(
+      int amount, String email, String accountNo, String bankCode) async {
+    String? token = await _prefsService.getAccessToken();
+    if (token == null) throw Exception('Failed to get token.');
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/seaseed/withdrawals/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+      body: {
+        'amount': '$amount',
+        'email': email,
+        'account_no': accountNo,
+        'bank_code': bankCode,
+      },
+    );
+
+    if (response.statusCode == 201) {
+      Map<String, dynamic> body = jsonDecode(response.body);
+      return Withdrawal.fromJson(body['withdrawal']);
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return createWithdrawal(amount, email, accountNo, bankCode);
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to create withdrawal.';
+    throw Exception(message);
+  }
+
+  /// Get bank list for withdrawal.
+  Future<List<Bank>> getBanks() async {
+    String? token = await _prefsService.getAccessToken();
+    if (token == null) throw Exception('Failed to get token.');
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/seaseed/banks/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = jsonDecode(response.body);
+      List banks = body['banks'];
+
+      return banks.map((bank) => Bank.fromJson(bank)).toList();
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return getBanks();
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to get banks.';
+    throw Exception(message);
+  }
+
+  /// Create a transfer.
+  Future<bool> createTransfer(
+      String toUserUuid, int amount, String remark) async {
+    String? token = await _prefsService.getAccessToken();
+    if (token == null) throw Exception('Failed to get token.');
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/seaseed/transfers/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+      body: {
+        'to_user_uuid': toUserUuid,
+        'amount': '$amount',
+        'remark': remark,
+      },
+    );
+
+    if (response.statusCode == 201) {
+      return true;
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return createTransfer(toUserUuid, amount, remark);
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to create transfer.';
     throw Exception(message);
   }
 

@@ -7,6 +7,7 @@ class MyTextFormField extends StatelessWidget {
     this.labelText,
     this.prefixIcon,
     this.prefixText,
+    this.suffixText,
     this.keyboardType,
     this.textInputAction,
     this.validator,
@@ -19,6 +20,7 @@ class MyTextFormField extends StatelessWidget {
   final String? labelText;
   final Icon? prefixIcon;
   final String? prefixText;
+  final String? suffixText;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
@@ -31,14 +33,15 @@ class MyTextFormField extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
         ),
         labelText: labelText,
         prefixIcon: prefixIcon,
         prefixText: prefixText,
+        suffixText: suffixText,
         contentPadding: smallPadding
-            ? const EdgeInsets.symmetric(vertical: 8, horizontal: 8)
-            : null,
+            ? const EdgeInsets.symmetric(vertical: 12, horizontal: 8)
+            : const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
       ),
       controller: controller,
       keyboardType: keyboardType,

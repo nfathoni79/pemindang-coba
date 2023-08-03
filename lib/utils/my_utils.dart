@@ -97,4 +97,39 @@ class MyUtils {
       barrierDismissible: true,
     );
   }
+
+  /// Show success dialog.
+  static Future showSuccessDialog(BuildContext context,
+      {String message = '', bool doublePop = false}) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sukses'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              if (doublePop) Navigator.pop(context);
+            },
+            child: const Text('Tutup'),
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    );
+  }
+
+
+  /// No empty form field validator.
+  static String? noEmptyValidator(String? value) {
+    if (value == null || value.isEmpty) return 'Harap diisi';
+    return null;
+  }
+
+  /// Must select dropdown validator.
+  static String? mustSelectValidator<T>(T? value) {
+    if (value == null) return 'Harap dipilih';
+    return null;
+  }
 }
