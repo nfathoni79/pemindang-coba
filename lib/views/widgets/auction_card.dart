@@ -35,7 +35,7 @@ class AuctionCard extends StatelessWidget {
     String lastBiddingText = '${MyUtils.formatNumber(auction.lastBid)} IDR';
 
     String statusText = 'Berlangsung';
-    if (auction.status == 1) statusText = 'Menunggu pemenang';
+    if (auction.status == 1) statusText = 'Proses pemenang';
     if (auction.status >= 2) statusText = 'Selesai';
 
     return Card(

@@ -91,7 +91,7 @@ class AuctionDetailView extends StackedView<AuctionDetailViewModel> {
     if (auction == null) return const Text('Tidak ada lelang');
 
     String statusText = 'Berlangsung';
-    if (auction.status == 1) statusText = 'Menunggu pemenang';
+    if (auction.status == 1) statusText = 'Proses pemenang';
     if (auction.status >= 2) statusText = 'Selesai';
 
     String fishText = '';

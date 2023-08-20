@@ -361,8 +361,6 @@ class LioService {
 
       return transactions
           .map((trx) => Transaction.fromJson(trx))
-          .toList()
-          .reversed
           .toList();
     }
 
