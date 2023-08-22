@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pemindang_coba/utils/my_utils.dart';
 import 'package:pemindang_coba/viewmodels/login_view_model.dart';
 import 'package:pemindang_coba/views/main_view.dart';
+import 'package:pemindang_coba/views/pending_view.dart';
 import 'package:pemindang_coba/views/register_view.dart';
 import 'package:pemindang_coba/views/widgets/my_button.dart';
 import 'package:pemindang_coba/views/widgets/my_text_form_field.dart';
@@ -119,6 +120,7 @@ class LoginView extends StackedView<LoginViewModel> {
     if (!viewModel.formKey.currentState!.validate()) return;
 
     MyUtils.showLoading(context);
+    bool? pendingApproval = await viewModel.getPendingApproval();
     String? message = await viewModel.login();
 
     if (context.mounted) {
@@ -135,7 +137,8 @@ class LoginView extends StackedView<LoginViewModel> {
 
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => const MainView(),
+          builder: (_) =>
+              pendingApproval != null ? const PendingView() : const MainView(),
         ),
         (route) => false,
       );

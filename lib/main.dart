@@ -3,6 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:pemindang_coba/app/locator.dart';
 import 'package:pemindang_coba/views/login_view.dart';
 import 'package:pemindang_coba/views/main_view.dart';
+import 'package:pemindang_coba/views/pending_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -16,6 +17,10 @@ void main() async {
 
   if (prefs.getString('accessToken') == null) {
     home = const LoginView();
+  }
+
+  if (prefs.getBool('pendingApproval') != null) {
+    home = const PendingView();
   }
 
   runApp(MyApp(home: home));

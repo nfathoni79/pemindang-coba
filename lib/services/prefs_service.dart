@@ -26,6 +26,21 @@ class PrefsService {
     return _prefs!.getString('refreshToken');
   }
 
+  Future setPendingApproval(bool value) async {
+    if (_prefs == null) await getPrefs();
+    _prefs!.setBool('pendingApproval', true);
+  }
+
+  Future<bool?> isPendingApproval() async {
+    if (_prefs == null) await getPrefs();
+    return _prefs!.getBool('pendingApproval');
+  }
+
+  Future clearPendingApproval() async {
+    if (_prefs == null) await getPrefs();
+    _prefs!.remove('pendingApproval');
+  }
+
   Future clearTokens() async {
     if (_prefs == null) return;
 

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pemindang_coba/app/locator.dart';
+import 'package:pemindang_coba/services/prefs_service.dart';
 import 'package:pemindang_coba/services/user_service.dart';
 import 'package:stacked/stacked.dart';
 
 class LoginViewModel extends BaseViewModel {
+  final _prefsService = locator<PrefsService>();
   final _userService = locator<UserService>();
 
   final formKey = GlobalKey<FormState>();
@@ -32,5 +34,9 @@ class LoginViewModel extends BaseViewModel {
       setBusy(false);
       return e.toString();
     }
+  }
+
+  Future<bool?> getPendingApproval() async {
+    return _prefsService.isPendingApproval();
   }
 }

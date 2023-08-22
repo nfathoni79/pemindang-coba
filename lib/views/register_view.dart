@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pemindang_coba/utils/my_utils.dart';
 import 'package:pemindang_coba/viewmodels/register_view_model.dart';
-import 'package:pemindang_coba/views/main_view.dart';
+import 'package:pemindang_coba/views/pending_view.dart';
 import 'package:pemindang_coba/views/widgets/my_button.dart';
 import 'package:pemindang_coba/views/widgets/my_text_form_field.dart';
 import 'package:stacked/stacked.dart';
@@ -158,7 +158,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
 
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => const MainView(),
+          builder: (_) => const PendingView(),
         ),
         (route) => false,
       );

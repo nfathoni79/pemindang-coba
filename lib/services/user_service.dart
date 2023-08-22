@@ -37,6 +37,14 @@ class UserService {
         username, fullName, phone, email, password, confirmPassword);
   }
 
+  Future<bool> createPendingApproval() async {
+    return _lio.createPendingApproval();
+  }
+
+  Future<int> getApprovalStatus() async {
+    return _lio.getApprovalStatus();
+  }
+
   Future<bool> createSeaseedUser() async {
     return _lio.createSeaseedUser();
   }

@@ -136,6 +136,59 @@ class LioService {
     throw Exception(message);
   }
 
+  /// Create pending Seaseed approval.
+  Future<bool> createPendingApproval() async {
+    String? token = await _prefsService.getAccessToken();
+    if (token == null) throw Exception('Failed to get token.');
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/seaseed/approvals/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 201) {
+      await _prefsService.setPendingApproval(true);
+      return true;
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return createPendingApproval();
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to create approval';
+    throw Exception(message);
+  }
+
+  /// Get approval status.
+  Future<int> getApprovalStatus() async {
+    String? token = await _prefsService.getAccessToken();
+    if (token == null) throw Exception('Failed to get token.');
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/seaseed/approvals/status/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['approval_status'];
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return getApprovalStatus();
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to get status.';
+    throw Exception(message);
+  }
+
   /// Create a new Seaseed User.
   Future<bool> createSeaseedUser() async {
     String? token = await _prefsService.getAccessToken();

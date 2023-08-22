@@ -69,7 +69,7 @@ class RegisterViewModel extends BaseViewModel {
     }
 
     try {
-      await _userService.createSeaseedUser();
+      await _userService.createPendingApproval();
       setBusy(false);
       return null;
     } catch (e) {
