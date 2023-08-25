@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:pemindang_coba/models/deposit.dart';
 import 'package:pemindang_coba/utils/my_utils.dart';
 import 'package:pemindang_coba/viewmodels/deposit_view_model.dart';
 import 'package:pemindang_coba/views/widgets/my_button.dart';
 import 'package:pemindang_coba/views/widgets/my_text_form_field.dart';
 import 'package:stacked/stacked.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DepositView extends StackedView<DepositViewModel> {
   const DepositView({super.key});
@@ -100,7 +100,7 @@ class DepositView extends StackedView<DepositViewModel> {
             const Text('Lakukan pembayaran pada tautan berikut:'),
             InkWell(
               onTap: () async =>
-                  await launchUrl(Uri.parse(deposit.paymentLink)),
+                  await _launchUrl(context, deposit.paymentLink),
               child: Text(
                 deposit.paymentLink,
                 style: TextStyle(
@@ -124,5 +124,17 @@ class DepositView extends StackedView<DepositViewModel> {
       ),
       barrierDismissible: false,
     );
+  }
+
+  Future _launchUrl(BuildContext context, String url) async {
+    try {
+      await launch(
+        url,
+        customTabsOption: const CustomTabsOption(),
+        safariVCOption: const SafariViewControllerOption(),
+      );
+    } catch (e) {
+      MyUtils.showSnackbar(context, 'Browser tidak terpasang.');
+    }
   }
 }
