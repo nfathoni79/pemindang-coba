@@ -189,6 +189,33 @@ class LioService {
     throw Exception(message);
   }
 
+  /// Get Seaseed Config
+  Future<String> getSeaseedConfig(String key) async {
+    String? token = await _prefsService.getAccessToken();
+    if (token == null) throw Exception('Failed to get token.');
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/seaseed/configs/?key=$key'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = jsonDecode(response.body);
+      return body['value'];
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return getSeaseedConfig(key);
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to get config.';
+    throw Exception(message);
+  }
+
   /// Create a new Seaseed User.
   Future<bool> createSeaseedUser() async {
     String? token = await _prefsService.getAccessToken();
@@ -596,6 +623,32 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to create bid.';
+    throw Exception(message);
+  }
+
+  /// Process pending admin cost for deposit and withdrawal.
+  Future<bool> processCost() async {
+    String? token = await _prefsService.getAccessToken();
+    if (token == null) throw Exception('Failed to get token.');
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/seaseed/process/'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return processCost();
+    }
+
+    String message =
+        jsonDecode(response.body)['message'] ?? 'Failed to process cost.';
     throw Exception(message);
   }
 }

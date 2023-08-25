@@ -4,7 +4,8 @@ import 'package:pemindang_coba/models/deposit.dart';
 import 'package:pemindang_coba/services/user_service.dart';
 import 'package:stacked/stacked.dart';
 
-class DepositViewModel extends BaseViewModel {
+class DepositViewModel extends FutureViewModel<int> {
+  static const String getAdminCostKey = 'getAdminCost';
   static const String createDepositKey = 'createDeposit';
 
   final _userService = locator<UserService>();
@@ -12,6 +13,18 @@ class DepositViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
   final amountController = TextEditingController();
   Deposit? deposit;
+
+  @override
+  Future<int> futureToRun() {
+    return getAdminCost();
+  }
+
+  Future<int> getAdminCost() async {
+    setBusyForObject(getAdminCostKey, true);
+    String costText = await _userService.getSeaseedConfig('admin_cost');
+    setBusyForObject(getAdminCostKey, false);
+    return int.parse(costText);
+  }
 
   Future<Deposit?> createDeposit() async {
     setBusyForObject(createDepositKey, true);

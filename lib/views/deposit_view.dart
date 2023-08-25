@@ -42,11 +42,13 @@ class DepositView extends StackedView<DepositViewModel> {
                     ),
                     const SizedBox(height: 8),
                     const Divider(),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Biaya layanan'),
-                        Text('0 IDR'),
+                        const Text('Biaya admin'),
+                        Text(viewModel.dataReady
+                            ? '${MyUtils.formatNumber(viewModel.data)} IDR'
+                            : '0 IDR'),
                       ],
                     ),
                   ],
@@ -86,8 +88,7 @@ class DepositView extends StackedView<DepositViewModel> {
     }
   }
 
-  Future _showDepositSuccessDialog(
-      BuildContext context, Deposit deposit) {
+  Future _showDepositSuccessDialog(BuildContext context, Deposit deposit) {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(

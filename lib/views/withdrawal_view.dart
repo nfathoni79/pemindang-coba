@@ -32,11 +32,13 @@ class WithdrawalView extends StackedView<WithdrawalViewModel> {
                       _buildForm(context, viewModel),
                       const SizedBox(height: 8),
                       const Divider(),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Biaya layanan'),
-                          Text('0 IDR'),
+                          const Text('Biaya admin'),
+                          Text(viewModel.dataReady
+                              ? '${MyUtils.formatNumber(viewModel.data)} IDR'
+                              : '0 IDR'),
                         ],
                       ),
                     ],
@@ -119,7 +121,7 @@ class WithdrawalView extends StackedView<WithdrawalViewModel> {
         Navigator.pop(context);
         MyUtils.showSuccessDialog(
           context,
-          message: 'Berhasil melakukan penarikan.',
+          message: 'Penarikan dalam proses verifikasi.',
           doublePop: true,
         );
       }

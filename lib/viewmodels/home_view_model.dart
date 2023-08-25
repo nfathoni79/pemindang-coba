@@ -9,6 +9,7 @@ import 'package:stacked/stacked.dart';
 class HomeViewModel extends MultipleFutureViewModel {
   static const String seaseedKey = 'seaseed';
   static const String auctionsKey = 'auctions';
+  static const String processKey = 'process';
 
   final _userService = locator<UserService>();
   final _auctionService = locator<AuctionService>();
@@ -17,6 +18,7 @@ class HomeViewModel extends MultipleFutureViewModel {
   Map<String, Future Function()> get futuresMap => {
     seaseedKey: getSeaseedUser,
     auctionsKey: getRecentAuctions,
+    processKey: processCost,
   };
 
   bool get seaseedBusy => busy(seaseedKey);
@@ -31,5 +33,9 @@ class HomeViewModel extends MultipleFutureViewModel {
 
   Future<List<Auction>> getRecentAuctions() {
     return _auctionService.getRecentAuctions();
+  }
+
+  Future<bool> processCost() {
+    return _userService.processCost();
   }
 }

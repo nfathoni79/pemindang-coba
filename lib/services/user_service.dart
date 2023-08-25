@@ -45,6 +45,10 @@ class UserService {
     return _lio.getApprovalStatus();
   }
 
+  Future<String> getSeaseedConfig(String key)  async {
+    return _lio.getSeaseedConfig(key);
+  }
+
   Future<bool> createSeaseedUser() async {
     return _lio.createSeaseedUser();
   }
@@ -86,5 +90,9 @@ class UserService {
   Future<List<Transaction>> getTransactions() async {
     _transactions = await _lio.getTransactions();
     return _transactions;
+  }
+
+  Future<bool> processCost() async {
+    return _lio.processCost();
   }
 }
