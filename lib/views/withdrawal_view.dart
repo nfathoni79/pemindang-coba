@@ -41,6 +41,21 @@ class WithdrawalView extends StackedView<WithdrawalViewModel> {
                               : '0 IDR'),
                         ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Total',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            viewModel.dataReady
+                                ? '${MyUtils.formatNumber(viewModel.totalAmount)} IDR'
+                                : '0 IDR',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -72,6 +87,7 @@ class WithdrawalView extends StackedView<WithdrawalViewModel> {
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.next,
             validator: (value) => MyUtils.noEmptyValidator(value),
+            onChanged: (value) => viewModel.calculateTotalAmount(),
           ),
           const SizedBox(height: 16),
           MyTextFormField(

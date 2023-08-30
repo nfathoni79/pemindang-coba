@@ -13,6 +13,8 @@ class TransferViewModel extends FutureViewModel<int> {
   final formKey = GlobalKey<FormState>();
   final amountController = TextEditingController();
   SeaseedUser? receiverUser;
+  int adminCost = 0;
+  int totalAmount = 0;
 
   @override
   Future<int> futureToRun() {
@@ -22,8 +24,11 @@ class TransferViewModel extends FutureViewModel<int> {
   Future<int> getAdminCost() async {
     setBusyForObject(getAdminCostKey, true);
     String costText = await _userService.getSeaseedConfig('admin_cost');
+    adminCost = int.parse(costText);
+    totalAmount = adminCost;
     setBusyForObject(getAdminCostKey, false);
-    return int.parse(costText);
+
+    return adminCost;
   }
 
   Future<List<SeaseedUser>> getOtherSeaseedUsers() async {
@@ -38,5 +43,15 @@ class TransferViewModel extends FutureViewModel<int> {
     await _userService.createTransfer(toUserUuid, amount, '');
     setBusyForObject(createTransferKey, false);
     return true;
+  }
+
+  void calculateTotalAmount() {
+    if (amountController.text != '') {
+      totalAmount = int.parse(amountController.text) + adminCost;
+    } else {
+      totalAmount = adminCost;
+    }
+
+    notifyListeners();
   }
 }

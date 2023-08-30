@@ -15,6 +15,8 @@ class WithdrawalViewModel extends FutureViewModel<int> {
   final emailController = TextEditingController();
   final accountNoController = TextEditingController();
   Bank? bank;
+  int adminCost = 0;
+  int totalAmount = 0;
 
   @override
   Future<int> futureToRun() {
@@ -24,8 +26,11 @@ class WithdrawalViewModel extends FutureViewModel<int> {
   Future<int> getAdminCost() async {
     setBusyForObject(getAdminCostKey, true);
     String costText = await _userService.getSeaseedConfig('admin_cost');
+    adminCost = int.parse(costText);
+    totalAmount = adminCost;
     setBusyForObject(getAdminCostKey, false);
-    return int.parse(costText);
+
+    return adminCost;
   }
 
   Future<List<Bank>> getBanks() async {
@@ -42,5 +47,15 @@ class WithdrawalViewModel extends FutureViewModel<int> {
     await _userService.createWithdrawal(amount, email, accountNo, bankCode);
     setBusyForObject(createWithdrawalKey, false);
     return true;
+  }
+
+  void calculateTotalAmount() {
+    if (amountController.text != '') {
+      totalAmount = int.parse(amountController.text) + adminCost;
+    } else {
+      totalAmount = adminCost;
+    }
+
+    notifyListeners();
   }
 }

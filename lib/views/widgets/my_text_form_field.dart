@@ -14,6 +14,7 @@ class MyTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.smallPadding = false,
     this.enabled,
+    this.onChanged,
   });
 
   final TextEditingController? controller;
@@ -27,6 +28,7 @@ class MyTextFormField extends StatelessWidget {
   final bool obscureText;
   final bool smallPadding;
   final bool? enabled;
+  final void Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class MyTextFormField extends StatelessWidget {
       obscureText: obscureText,
       validator: validator,
       enabled: enabled,
+      onChanged: onChanged,
     );
   }
 }
