@@ -13,6 +13,9 @@ class RegisterViewModel extends BaseViewModel {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  String? userGroup;
+
+  List<String> userGroups = ['pemindang', 'pabrik'];
 
   String? noEmptyValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -54,8 +57,8 @@ class RegisterViewModel extends BaseViewModel {
     String confirmPassword = confirmPasswordController.text;
 
     try {
-      await _userService.register(
-          username, fullName, phone, email, password, confirmPassword);
+      await _userService.register(username, fullName, phone, email, userGroup!,
+          password, confirmPassword);
     } catch (e) {
       setBusy(false);
       return e.toString();

@@ -16,6 +16,7 @@ class MyDropdown<T> extends StatelessWidget {
     this.showSelectedItems = false,
     this.validator,
     this.disabledItemFn,
+    this.showSearchBox = true,
   });
 
   final List<T> items;
@@ -30,13 +31,14 @@ class MyDropdown<T> extends StatelessWidget {
   final bool showSelectedItems;
   final String? Function(T?)? validator;
   final bool Function(T)? disabledItemFn;
+  final bool showSearchBox;
 
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<T>(
       popupProps: PopupProps.menu(
         showSelectedItems: showSelectedItems,
-        showSearchBox: true,
+        showSearchBox: showSearchBox,
         searchFieldProps: const TextFieldProps(
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.search),

@@ -32,9 +32,9 @@ class UserService {
   }
 
   Future<bool> register(String username, String fullName, String phone,
-      String email, String password, String confirmPassword) {
+      String email, String group, String password, String confirmPassword) {
     return _lio.createUser(
-        username, fullName, phone, email, password, confirmPassword);
+        username, fullName, phone, email, group, password, confirmPassword);
   }
 
   Future<bool> createPendingApproval() async {

@@ -55,6 +55,11 @@ class MyUtils {
     return 'Baru saja';
   }
 
+  /// Capitalize first letter of text.
+  static String capitalize(String text) {
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
   /// Show loading dialog.
   static Future showLoading(BuildContext context) {
     return showDialog(

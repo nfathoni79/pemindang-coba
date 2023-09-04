@@ -3,6 +3,7 @@ import 'package:pemindang_coba/utils/my_utils.dart';
 import 'package:pemindang_coba/viewmodels/register_view_model.dart';
 import 'package:pemindang_coba/views/pending_view.dart';
 import 'package:pemindang_coba/views/widgets/my_button.dart';
+import 'package:pemindang_coba/views/widgets/my_dropdown.dart';
 import 'package:pemindang_coba/views/widgets/my_text_form_field.dart';
 import 'package:stacked/stacked.dart';
 
@@ -111,6 +112,20 @@ class RegisterView extends StackedView<RegisterViewModel> {
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             validator: (value) => viewModel.noEmptyValidator(value),
+          ),
+          const SizedBox(height: 16),
+          MyDropdown<String>(
+            items: viewModel.userGroups,
+            labelText: 'Jenis Pengguna',
+            prefixIcon: const Icon(Icons.group_outlined),
+            showSearchBox: false,
+            itemAsString: (group) => MyUtils.capitalize(group),
+            onChanged: (group) {
+              if (group is String) {
+                viewModel.userGroup = group;
+              }
+            },
+            validator: (value) => MyUtils.mustSelectValidator(value),
           ),
           const SizedBox(height: 16),
           MyTextFormField(

@@ -1,3 +1,5 @@
+import 'package:pemindang_coba/utils/my_utils.dart';
+
 class User {
   const User({
     required this.id,
@@ -5,15 +7,21 @@ class User {
     required this.email,
     required this.phone,
     required this.fullName,
+    this.group = 'Pemindang',
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
+    List<dynamic> groups = json['groups'];
+
     return User(
       id: json['id'],
       username: json['username'],
       email: json['email'],
       phone: json['phone'],
       fullName: json['full_name'],
+      group: groups.isNotEmpty
+          ? MyUtils.capitalize(groups[0]['name'])
+          : 'Pemindang',
     );
   }
 
@@ -22,4 +30,5 @@ class User {
   final String email;
   final String phone;
   final String fullName;
+  final String group;
 }
