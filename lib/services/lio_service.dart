@@ -17,14 +17,15 @@ import 'package:pemindang_coba/services/prefs_service.dart';
 
 class LioService {
   // static const String baseUrl = 'http://10.0.2.2:8011';
-  // static const String clientId = 'OsICEuPxJeliGMUUgD4QWdLrScABZ6iYNlufK0HS';
-  // static const String clientSecret =
-  //     'PcNgOsWkSNEanccbitKRwe0shukYpElWgmPl0dk8rYDEraiQT6DKRAb2ejUhlvuDI6MgDav0tnIgsE0BF5N024RDkbDy3OAYUlLooQalQjaLEtQkqWu6SFyPmFo8ZdtC';
-
-  static const String baseUrl = 'https://tpi-staging.perindo.id';
-  static const String clientId = 'UzWRvKhifLEqElHhcvjY1udlMbTRIigfINfJtdSg';
+  static const String baseUrl = 'http://localhost:8011';
+  static const String clientId = 'OsICEuPxJeliGMUUgD4QWdLrScABZ6iYNlufK0HS';
   static const String clientSecret =
-      '5ZC4GNcSXjyjNtjHgPzi6WghJPTGTXWUr8hE8n9rKCtZh3hSk1KYWY7OEHupRPuYwGEdBylx88lKcTKh0qWzVqRv9ABMvk21AAS9ZpnhJv8a1z3LY70Jc16EOU9npf0P';
+      'PcNgOsWkSNEanccbitKRwe0shukYpElWgmPl0dk8rYDEraiQT6DKRAb2ejUhlvuDI6MgDav0tnIgsE0BF5N024RDkbDy3OAYUlLooQalQjaLEtQkqWu6SFyPmFo8ZdtC';
+
+  // static const String baseUrl = 'https://tpi-staging.perindo.id';
+  // static const String clientId = 'UzWRvKhifLEqElHhcvjY1udlMbTRIigfINfJtdSg';
+  // static const String clientSecret =
+  //     '5ZC4GNcSXjyjNtjHgPzi6WghJPTGTXWUr8hE8n9rKCtZh3hSk1KYWY7OEHupRPuYwGEdBylx88lKcTKh0qWzVqRv9ABMvk21AAS9ZpnhJv8a1z3LY70Jc16EOU9npf0P';
 
   final _prefsService = locator<PrefsService>();
 

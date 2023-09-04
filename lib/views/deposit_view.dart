@@ -38,6 +38,7 @@ class DepositView extends StackedView<DepositViewModel> {
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.done,
                         validator: (value) => MyUtils.noEmptyValidator(value),
+                        onChanged: (value) => viewModel.calculateTotalAmount(),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -49,6 +50,21 @@ class DepositView extends StackedView<DepositViewModel> {
                         Text(viewModel.dataReady
                             ? '${MyUtils.formatNumber(viewModel.data)} IDR'
                             : '0 IDR'),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Total',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          viewModel.dataReady
+                              ? '${MyUtils.formatNumber(viewModel.totalAmount)} IDR'
+                              : '0 IDR',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                   ],
