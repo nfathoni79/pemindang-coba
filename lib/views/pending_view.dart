@@ -15,7 +15,7 @@ class PendingView extends StackedView<PendingViewModel> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        title: const Text('Perindo Pemindang'),
+        title: const Text('Perindo Bisnis'),
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

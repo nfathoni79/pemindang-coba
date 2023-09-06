@@ -40,7 +40,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
                               fontSize: 16,
                             ),
                           ),
-                          Text('+62${viewModel.user.phone}'),
+                          Text(viewModel.user.username),
                           const SizedBox(height: 8),
                           Text(viewModel.user.group),
                         ],

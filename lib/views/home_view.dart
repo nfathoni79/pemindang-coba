@@ -20,7 +20,7 @@ class HomeView extends StackedView<HomeViewModel> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        title: const Text('Perindo Pemindang'),
+        title: const Text('Perindo Bisnis'),
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context)
@@ -97,10 +97,8 @@ class HomeView extends StackedView<HomeViewModel> {
                 MenuButton(
                   iconData: Icons.arrow_circle_right_outlined,
                   label: 'Kirim',
-                  color: Colors.blue.shade900,
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const TransferView(),
-                  )),
+                  color: Colors.grey.shade500,
+                  onTap: null,
                 ),
                 MenuButton(
                   iconData: Icons.arrow_circle_down_outlined,

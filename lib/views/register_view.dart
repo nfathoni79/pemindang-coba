@@ -28,7 +28,7 @@ class RegisterView extends StackedView<RegisterViewModel> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(32),
-                  child: Image.asset('assets/images/perindo_pemindang.png'),
+                  child: Image.asset('assets/images/perindo_bisnis.png'),
                 ),
                 Card(
                   elevation: 2,
