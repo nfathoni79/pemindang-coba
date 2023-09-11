@@ -14,6 +14,7 @@ class DepositViewModel extends FutureViewModel<int> {
   final amountController = TextEditingController();
   Deposit? deposit;
   int adminCost = 0;
+  int durianAdminCost = 0;
   int totalAmount = 0;
 
   @override
@@ -24,11 +25,13 @@ class DepositViewModel extends FutureViewModel<int> {
   Future<int> getAdminCost() async {
     setBusyForObject(getAdminCostKey, true);
     String costText = await _userService.getSeaseedConfig('admin_cost');
+    String durianText = await _userService.getSeaseedConfig('admin_cost_durianpay');
     adminCost = int.parse(costText);
-    totalAmount = adminCost;
+    durianAdminCost = int.parse(durianText);
+    totalAmount = adminCost + durianAdminCost;
     setBusyForObject(getAdminCostKey, false);
 
-    return adminCost;
+    return adminCost + durianAdminCost;
   }
 
   Future<Deposit?> createDeposit() async {
@@ -40,9 +43,9 @@ class DepositViewModel extends FutureViewModel<int> {
 
   void calculateTotalAmount() {
     if (amountController.text != '') {
-      totalAmount = int.parse(amountController.text) + adminCost;
+      totalAmount = int.parse(amountController.text) + adminCost + durianAdminCost;
     } else {
-      totalAmount = adminCost;
+      totalAmount = adminCost + durianAdminCost;
     }
 
     notifyListeners();
