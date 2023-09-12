@@ -1,50 +1,50 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PrefsService {
+  static const String accessTokenKey = 'accessToken';
+  static const String refreshTokenKey = 'refreshToken';
+  static const String userApprovedKey = 'userApproved';
+
+  static PrefsService? _instance;
+
+  /// Get PrefsService instance with initialized SharedPreferences.
+  static Future<PrefsService> getInstance() async {
+    _instance ??= PrefsService();
+    _instance!._prefs ??= await SharedPreferences.getInstance();
+
+    return _instance!;
+  }
+
   SharedPreferences? _prefs;
 
-  SharedPreferences? get prefs => _prefs;
-
-  Future<SharedPreferences?> getPrefs() async {
-    _prefs = await SharedPreferences.getInstance();
-    return _prefs;
+  /// Set current user access and refresh tokens.
+  void setTokens(String accessToken, String refreshToken) {
+    _prefs!.setString(accessTokenKey, accessToken);
+    _prefs!.setString(refreshTokenKey, refreshToken);
   }
 
-  Future setTokens(String accessToken, String refreshToken) async {
-    if (_prefs == null) await getPrefs();
-    _prefs!.setString('accessToken', accessToken);
-    _prefs!.setString('refreshToken', refreshToken);
+  /// Get current user access token.
+  String? getAccessToken() {
+    return _prefs!.getString(accessTokenKey);
   }
 
-  Future<String?> getAccessToken() async {
-    if (_prefs == null) await getPrefs();
-    return _prefs!.getString('accessToken');
+  /// Get current user refresh token.
+  String? getRefreshToken() {
+    return _prefs!.getString(refreshTokenKey);
   }
 
-  Future<String?> getRefreshToken() async {
-    if (_prefs == null) await getPrefs();
-    return _prefs!.getString('refreshToken');
+  /// Check if current user is approved or not.
+  bool? isUserApproved() {
+    return _prefs?.getBool(userApprovedKey);
   }
 
-  Future setPendingApproval(bool value) async {
-    if (_prefs == null) await getPrefs();
-    _prefs!.setBool('pendingApproval', true);
+  /// Set user approval to approved or not.
+  void setUserApproved(bool value) {
+    _prefs?.setBool(userApprovedKey, value);
   }
 
-  Future<bool?> isPendingApproval() async {
-    if (_prefs == null) await getPrefs();
-    return _prefs!.getBool('pendingApproval');
-  }
-
-  Future clearPendingApproval() async {
-    if (_prefs == null) await getPrefs();
-    _prefs!.remove('pendingApproval');
-  }
-
-  Future clearTokens() async {
-    if (_prefs == null) return;
-
-    _prefs!.remove('accessToken');
-    _prefs!.remove('refreshToken');
+  /// Clear all prefs.
+  void clearPrefs() {
+    _prefs!.clear();
   }
 }

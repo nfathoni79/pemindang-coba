@@ -20,19 +20,23 @@ class PendingViewModel extends FutureViewModel<int> {
     return status;
   }
 
-  Future clearPendingApproval() async {
-    return _prefService.clearPendingApproval();
+  /// Set current user is approved.
+  void setUserApproved() {
+    _prefService.setUserApproved(true);
   }
 
-  Future logout() {
-    return _prefService.clearTokens();
-  }
-
+  /// Get user approval message.
+  /// -1: Declined, 0: Pending, 1: Approved.
   String getApprovalText(int status) {
     if (status < 0) {
       return 'Akun Anda tidak disetujui oleh Admin.';
     }
 
     return 'Akun Anda sedang menunggu persetujuan dari Admin.';
+  }
+
+  /// Log user out by clearing all prefs.
+  void logout() {
+    _prefService.clearPrefs();
   }
 }

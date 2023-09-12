@@ -48,19 +48,18 @@ class LioService {
 
     if (response.statusCode == 200) {
       UserToken token = UserToken.fromJson(jsonDecode(response.body));
-      await _prefsService.setTokens(token.accessToken, token.refreshToken);
+      _prefsService.setTokens(token.accessToken, token.refreshToken);
 
       return token;
     }
 
-    String message =
-        jsonDecode(response.body)['message'] ?? 'Failed to get token.';
-    throw Exception(message);
+    String? message = jsonDecode(response.body)['error_description'];
+    throw Exception(message ?? 'Failed to get token.');
   }
 
   /// Get a new token if old token is expired.
   Future<UserToken> refreshToken() async {
-    String? refreshToken = await _prefsService.getRefreshToken();
+    String? refreshToken = _prefsService.getRefreshToken();
 
     final response = await http.post(
       Uri.parse('$baseUrl/o/token/'),
@@ -74,7 +73,7 @@ class LioService {
 
     if (response.statusCode == 200) {
       UserToken token = UserToken.fromJson(jsonDecode(response.body));
-      await _prefsService.setTokens(token.accessToken, token.refreshToken);
+      _prefsService.setTokens(token.accessToken, token.refreshToken);
 
       return token;
     }
@@ -113,7 +112,7 @@ class LioService {
 
   /// Get current user.
   Future<User> getUser() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -140,7 +139,7 @@ class LioService {
 
   /// Create pending Seaseed approval.
   Future<bool> createPendingApproval() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.post(
@@ -151,7 +150,7 @@ class LioService {
     );
 
     if (response.statusCode == 201) {
-      await _prefsService.setPendingApproval(true);
+      _prefsService.setUserApproved(false);
       return true;
     }
 
@@ -167,7 +166,7 @@ class LioService {
 
   /// Get approval status.
   Future<int> getApprovalStatus() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -193,7 +192,7 @@ class LioService {
 
   /// Get Seaseed Config
   Future<String> getSeaseedConfig(String key) async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -220,7 +219,7 @@ class LioService {
 
   /// Create a new Seaseed User.
   Future<bool> createSeaseedUser() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.post(
@@ -246,7 +245,7 @@ class LioService {
 
   /// Get current Seaseed user.
   Future<SeaseedUser> getSeaseedUser() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -273,7 +272,7 @@ class LioService {
 
   /// Get other Seaseed users except current one.
   Future<List<SeaseedUser>> getOtherSeaseedUsers() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -302,7 +301,7 @@ class LioService {
 
   /// Create a deposit.
   Future<Deposit> createDeposit(int amount) async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.post(
@@ -333,7 +332,7 @@ class LioService {
   /// Create a withdrawal.
   Future<Withdrawal> createWithdrawal(
       int amount, String email, String accountNo, String bankCode) async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.post(
@@ -366,7 +365,7 @@ class LioService {
 
   /// Get bank list for withdrawal.
   Future<List<Bank>> getBanks() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -396,7 +395,7 @@ class LioService {
   /// Create a transfer.
   Future<bool> createTransfer(
       String toUserUuid, int amount, String remark) async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.post(
@@ -427,7 +426,7 @@ class LioService {
 
   /// Get user's Seaseed transaction list.
   Future<List<Transaction>> getTransactions() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -458,7 +457,7 @@ class LioService {
 
   /// Get store/location list.
   Future<List<Store>> getStores() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -487,7 +486,7 @@ class LioService {
 
   /// Get auction list filtered by store.
   Future<List<Auction>> getAuctionsByStore(String slug) async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -516,7 +515,7 @@ class LioService {
 
   /// Get your auction list filtered by store.
   Future<List<Auction>> getYourAuctionsByStore(String slug) async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -545,7 +544,7 @@ class LioService {
 
   /// Get recent auction list.
   Future<List<Auction>> getRecentAuctions() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -574,7 +573,7 @@ class LioService {
 
   /// Get a single auction by ID.
   Future<Auction> getAuctionById(int id) async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.get(
@@ -600,7 +599,7 @@ class LioService {
 
   /// Make a bid to a certain auction.
   Future<bool> createBid(int auctionId, int price) async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.post(
@@ -630,7 +629,7 @@ class LioService {
 
   /// Process pending admin cost for deposit and withdrawal.
   Future<bool> processCost() async {
-    String? token = await _prefsService.getAccessToken();
+    String? token = _prefsService.getAccessToken();
     if (token == null) throw Exception('Failed to get token.');
 
     final response = await http.post(

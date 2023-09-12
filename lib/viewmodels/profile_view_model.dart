@@ -23,7 +23,8 @@ class ProfileViewModel extends MultipleFutureViewModel {
     return _userService.getCurrentUser();
   }
 
-  Future logout() {
-    return _prefService.clearTokens();
+  /// Log user out by clearing all prefs.
+  void logout() {
+    _prefService.clearPrefs();
   }
 }

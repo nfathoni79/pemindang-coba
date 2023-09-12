@@ -99,7 +99,7 @@ class LoginView extends StackedView<LoginViewModel> {
             prefixIcon: const Icon(Icons.person_outline),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
-            validator: (value) => viewModel.noEmptyValidator(value),
+            validator: (value) => MyUtils.noEmptyValidator(value),
           ),
           const SizedBox(height: 16),
           MyTextFormField(
@@ -109,7 +109,7 @@ class LoginView extends StackedView<LoginViewModel> {
             keyboardType: TextInputType.visiblePassword,
             textInputAction: TextInputAction.done,
             obscureText: true,
-            validator: (value) => viewModel.noEmptyValidator(value),
+            validator: (value) => MyUtils.noEmptyValidator(value),
           ),
         ],
       ),
@@ -120,25 +120,30 @@ class LoginView extends StackedView<LoginViewModel> {
     if (!viewModel.formKey.currentState!.validate()) return;
 
     MyUtils.showLoading(context);
-    bool? pendingApproval = await viewModel.getPendingApproval();
     String? message = await viewModel.login();
 
+    // Show error dialog if login fails.
+    if (context.mounted && message != null) {
+      Navigator.pop(context);
+      MyUtils.showErrorDialog(
+        context,
+        message: message,
+      );
+
+      return;
+    }
+
+    // Get approval status. If status is 1, user is approved.
+    int approvalStatus = await viewModel.getApprovalStatus();
+    viewModel.setUserApproved(approvalStatus > 0);
+
+    // Go to PendingView is user is not approved yet, otherwise go to MainView.
     if (context.mounted) {
       Navigator.pop(context);
-
-      if (message != null) {
-        MyUtils.showErrorDialog(
-          context,
-          message: message,
-        );
-
-        return;
-      }
-
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) =>
-              pendingApproval != null ? const PendingView() : const MainView(),
+              approvalStatus <= 0 ? const PendingView() : const MainView(),
         ),
         (route) => false,
       );

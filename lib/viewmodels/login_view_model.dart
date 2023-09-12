@@ -12,14 +12,6 @@ class LoginViewModel extends BaseViewModel {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  String? noEmptyValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Harap diisi';
-    }
-
-    return null;
-  }
-
   Future<String?> login() async {
     setBusy(true);
 
@@ -36,7 +28,14 @@ class LoginViewModel extends BaseViewModel {
     }
   }
 
-  Future<bool?> getPendingApproval() async {
-    return _prefsService.isPendingApproval();
+  /// Get current user approval status value.
+  /// 0: Pending, 1: Approved, -1: Declined.
+  Future<int> getApprovalStatus() async {
+    return await _userService.getApprovalStatus();
+  }
+
+  /// Set user is approved or not to prefs.
+  void setUserApproved(bool value) {
+    _prefsService.setUserApproved(value);
   }
 }

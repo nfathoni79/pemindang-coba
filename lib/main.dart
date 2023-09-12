@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pemindang_coba/app/locator.dart';
+import 'package:pemindang_coba/services/prefs_service.dart';
 import 'package:pemindang_coba/views/login_view.dart';
 import 'package:pemindang_coba/views/main_view.dart';
 import 'package:pemindang_coba/views/pending_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
 
-  setupLocator();
+  await setupLocator();
+  final prefsService = locator<PrefsService>();
 
+  // Default home view is MainView
   Widget home = const MainView();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  if (prefs.getString('accessToken') == null) {
+  // Check if user doesn't have a token. If true, go to LoginView.
+  // If user has a token, check if the user is not approved. If true, go to
+  // PendingView
+  if (prefsService.getAccessToken() == null) {
     home = const LoginView();
-  }
-
-  if (prefs.getBool('pendingApproval') != null) {
+  } else if (prefsService.isUserApproved() == null ||
+      !prefsService.isUserApproved()!) {
     home = const PendingView();
   }
 

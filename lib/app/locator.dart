@@ -7,9 +7,11 @@ import 'package:pemindang_coba/services/user_service.dart';
 
 final locator = GetIt.instance;
 
-setupLocator() {
+Future<void> setupLocator() async {
+  final prefsService = await PrefsService.getInstance();
+  locator.registerSingleton<PrefsService>(prefsService);
+
   locator.registerLazySingleton(() => LioService());
-  locator.registerLazySingleton(() => PrefsService());
   locator.registerLazySingleton(() => AuctionService());
   locator.registerLazySingleton(() => StoreService());
   locator.registerLazySingleton(() => UserService());

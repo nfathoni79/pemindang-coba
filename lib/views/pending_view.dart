@@ -54,7 +54,7 @@ class PendingView extends StackedView<PendingViewModel> {
     viewModel.data = status;
 
     if (context.mounted && status > 0) {
-      await viewModel.clearPendingApproval();
+      viewModel.setUserApproved();
 
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -69,7 +69,7 @@ class PendingView extends StackedView<PendingViewModel> {
 
   void _onPressedLogout(
       BuildContext context, PendingViewModel viewModel) async {
-    await viewModel.logout();
+    viewModel.logout();
 
     if (context.mounted) {
       Navigator.of(context).pushAndRemoveUntil(
