@@ -24,7 +24,7 @@ class HomeViewModel extends MultipleFutureViewModel {
   bool get seaseedBusy => busy(seaseedKey);
   bool get auctionsBusy => busy(auctionsKey);
 
-  SeaseedUser get seaseed => dataMap?[seaseedKey];
+  SeaseedUser? get seaseed => dataMap?[seaseedKey];
   List<Auction> get auctions => dataMap?[auctionsKey];
 
   Future<SeaseedUser?> getSeaseedUser() {

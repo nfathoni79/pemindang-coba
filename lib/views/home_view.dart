@@ -65,6 +65,7 @@ class HomeView extends StackedView<HomeViewModel> {
 
   Widget _buildBalanceCard(BuildContext context, HomeViewModel viewModel) {
     return Card(
+      color: Colors.blue.shade50,
       elevation: 2,
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -77,7 +78,7 @@ class HomeView extends StackedView<HomeViewModel> {
             viewModel.seaseedBusy
                 ? const CircularProgressIndicator()
                 : Text(
-                    '${MyUtils.formatNumber(viewModel.seaseed.balance)} IDR',
+                    '${MyUtils.formatNumber(viewModel.seaseed?.balance)} IDR',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,

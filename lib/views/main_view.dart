@@ -9,26 +9,25 @@ class MainView extends StackedView<MainViewModel> {
   Widget builder(BuildContext context, MainViewModel viewModel, Widget? child) {
     return Scaffold(
       body: viewModel.getCurrentScreen(),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        selectedItemColor: Colors.blue.shade50,
-        unselectedItemColor: Colors.blue.shade300,
-        items: const [
-          BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.blue.shade50,
+        indicatorColor: Colors.blue.shade200,
+        destinations: const [
+          NavigationDestination(
             icon: Icon(Icons.home_outlined),
             label: 'Beranda',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.list_alt_outlined),
             label: 'Lelang',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.person_outline),
             label: 'Anda',
           ),
         ],
-        currentIndex: viewModel.navbarIndex,
-        onTap: viewModel.onNavbarItemTapped,
+        selectedIndex: viewModel.navbarIndex,
+        onDestinationSelected: viewModel.onNavbarItemTapped,
       ),
     );
   }

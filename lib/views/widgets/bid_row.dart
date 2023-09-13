@@ -48,7 +48,7 @@ class BidRow extends StatelessWidget {
         ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
-          child: Image.asset(imagePath),
+          child: Image.asset(imagePath, width: 24),
         ),
         Expanded(
           flex: 3,
