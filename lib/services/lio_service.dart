@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pemindang_coba/app/locator.dart';
+import 'package:pemindang_coba/models/api_exception.dart';
 import 'package:pemindang_coba/models/auction.dart';
 import 'package:pemindang_coba/models/bank.dart';
 import 'package:pemindang_coba/models/deposit.dart';
@@ -54,7 +55,7 @@ class LioService {
     }
 
     String? message = jsonDecode(response.body)['error_description'];
-    throw Exception(message ?? 'Failed to get token.');
+    throw ApiException(message ?? 'Failed to get token.');
   }
 
   /// Get a new token if old token is expired.
@@ -80,7 +81,7 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get a new token.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Register a new user.
@@ -107,13 +108,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to register.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get current user.
   Future<User> getUser() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/user/v2/users/current/'),
@@ -134,13 +135,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get user.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Create pending Seaseed approval.
   Future<bool> createPendingApproval() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.post(
       Uri.parse('$baseUrl/seaseed/approvals/'),
@@ -161,13 +162,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to create approval';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get approval status.
   Future<int> getApprovalStatus() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/seaseed/approvals/status/'),
@@ -187,13 +188,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get status.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get Seaseed Config
   Future<String> getSeaseedConfig(String key) async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/seaseed/configs/?key=$key'),
@@ -214,13 +215,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get config.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Create a new Seaseed User.
   Future<bool> createSeaseedUser() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.post(
       Uri.parse('$baseUrl/seaseed/users/'),
@@ -240,13 +241,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to create Seaseed user';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get current Seaseed user.
   Future<SeaseedUser> getSeaseedUser() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/seaseed/users/current/'),
@@ -267,13 +268,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get Seaseed user.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get other Seaseed users except current one.
   Future<List<SeaseedUser>> getOtherSeaseedUsers() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/seaseed/users/others/'),
@@ -296,13 +297,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get other users.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Create a deposit.
   Future<Deposit> createDeposit(int amount) async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.post(
       Uri.parse('$baseUrl/seaseed/deposits/'),
@@ -326,14 +327,14 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to create deposit.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Create a withdrawal.
   Future<Withdrawal> createWithdrawal(
       int amount, String email, String accountNo, String bankCode) async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.post(
       Uri.parse('$baseUrl/seaseed/withdrawals/'),
@@ -360,13 +361,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to create withdrawal.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get bank list for withdrawal.
   Future<List<Bank>> getBanks() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/seaseed/banks/'),
@@ -389,14 +390,14 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get banks.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Create a transfer.
   Future<bool> createTransfer(
       String toUserUuid, int amount, String remark) async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.post(
       Uri.parse('$baseUrl/seaseed/transfers/'),
@@ -421,13 +422,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to create transfer.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get user's Seaseed transaction list.
   Future<List<Transaction>> getTransactions() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/seaseed/transactions/'),
@@ -452,13 +453,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get transactions.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get store/location list.
   Future<List<Store>> getStores() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/lelang/v2/stores/?prefix=PI'),
@@ -481,13 +482,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get stores';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get auction list filtered by store.
   Future<List<Auction>> getAuctionsByStore(String slug) async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/lelang/v2/auctions/?store=$slug'),
@@ -510,13 +511,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get auctions.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get your auction list filtered by store.
   Future<List<Auction>> getYourAuctionsByStore(String slug) async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/lelang/v2/auctions/?store=$slug&own=1'),
@@ -539,13 +540,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get auctions';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get recent auction list.
   Future<List<Auction>> getRecentAuctions() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/lelang/v2/auctions/recent/'),
@@ -568,13 +569,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get auctions.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Get a single auction by ID.
   Future<Auction> getAuctionById(int id) async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.get(
       Uri.parse('$baseUrl/lelang/v2/auctions/detail/$id'),
@@ -594,13 +595,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to get auction.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Make a bid to a certain auction.
   Future<bool> createBid(int auctionId, int price) async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.post(
       Uri.parse('$baseUrl/lelang/v2/bids/'),
@@ -624,13 +625,13 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to create bid.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 
   /// Process pending admin cost for deposit and withdrawal.
   Future<bool> processCost() async {
     String? token = _prefsService.getAccessToken();
-    if (token == null) throw Exception('Failed to get token.');
+    if (token == null) throw ApiException('Failed to get token.');
 
     final response = await http.post(
       Uri.parse('$baseUrl/seaseed/process/'),
@@ -650,6 +651,6 @@ class LioService {
 
     String message =
         jsonDecode(response.body)['message'] ?? 'Failed to process cost.';
-    throw Exception(message);
+    throw ApiException(message);
   }
 }
