@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:pemindang_coba/app/config.dart';
 import 'package:pemindang_coba/app/locator.dart';
 import 'package:pemindang_coba/models/api_exception.dart';
 import 'package:pemindang_coba/models/auction.dart';
@@ -17,21 +19,38 @@ import 'package:pemindang_coba/models/withdrawal.dart';
 import 'package:pemindang_coba/services/prefs_service.dart';
 
 class LioService {
-  // // static const String baseUrl = 'http://10.0.2.2:8011';
-  // static const String baseUrl = 'http://localhost:8011';
-  // static const String clientId = 'OsICEuPxJeliGMUUgD4QWdLrScABZ6iYNlufK0HS';
-  // static const String clientSecret =
-  //     'PcNgOsWkSNEanccbitKRwe0shukYpElWgmPl0dk8rYDEraiQT6DKRAb2ejUhlvuDI6MgDav0tnIgsE0BF5N024RDkbDy3OAYUlLooQalQjaLEtQkqWu6SFyPmFo8ZdtC';
+  static LioService? _instance;
 
-  static const String baseUrl = 'https://tpi-staging.perindo.id';
-  static const String clientId = 'UzWRvKhifLEqElHhcvjY1udlMbTRIigfINfJtdSg';
-  static const String clientSecret =
-      '5ZC4GNcSXjyjNtjHgPzi6WghJPTGTXWUr8hE8n9rKCtZh3hSk1KYWY7OEHupRPuYwGEdBylx88lKcTKh0qWzVqRv9ABMvk21AAS9ZpnhJv8a1z3LY70Jc16EOU9npf0P';
+  static Future<LioService> getInstance() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    if (packageInfo.packageName.endsWith('.local')) {
+      debugPrint('Using Local API');
+      _instance ??= LioService(Config.apiBaseUrlLocal,
+          Config.apiClientIdLocal, Config.apiClientSecretLocal);
+    } else if (packageInfo.packageName.endsWith('.dev')) {
+      debugPrint('Using Dev API');
+      _instance ??= LioService(Config.apiBaseUrlDev, Config.apiClientIdDev,
+          Config.apiClientSecretDev);
+    } else {
+      debugPrint('Using Prod API');
+      _instance ??= LioService(Config.apiBaseUrlProd, Config.apiClientIdProd,
+          Config.apiClientSecretProd);
+    }
+
+    return _instance!;
+  }
+
+  LioService(this.baseUrl, this.clientId, this.clientSecret) {
+    basicAuth = 'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}';
+  }
 
   final _prefsService = locator<PrefsService>();
 
-  String basicAuth =
-      'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}';
+  final String baseUrl;
+  final String clientId;
+  final String clientSecret;
+  String basicAuth = '';
 
   /// Login. Get token to access other APIs.
   Future<UserToken> getToken(String username, String password) async {
@@ -85,8 +104,14 @@ class LioService {
   }
 
   /// Register a new user.
-  Future<bool> createUser(String username, String fullName, String phone,
-      String email, String group, String password, String confirmPassword) async {
+  Future<bool> createUser(
+      String username,
+      String fullName,
+      String phone,
+      String email,
+      String group,
+      String password,
+      String confirmPassword) async {
     final response = await http.post(
       Uri.parse('$baseUrl/user/v2/register/'),
       body: {
@@ -441,9 +466,7 @@ class LioService {
       Map<String, dynamic> body = jsonDecode(response.body);
       List transactions = body['transactions'];
 
-      return transactions
-          .map((trx) => Transaction.fromJson(trx))
-          .toList();
+      return transactions.map((trx) => Transaction.fromJson(trx)).toList();
     }
 
     if (response.statusCode == 401) {
