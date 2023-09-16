@@ -11,7 +11,9 @@ Future<void> setupLocator() async {
   final prefsService = await PrefsService.getInstance();
   locator.registerSingleton<PrefsService>(prefsService);
 
-  locator.registerLazySingleton(() => LioService());
+  final lioService = await LioService.getInstance();
+  locator.registerSingleton<LioService>(lioService);
+
   locator.registerLazySingleton(() => AuctionService());
   locator.registerLazySingleton(() => StoreService());
   locator.registerLazySingleton(() => UserService());

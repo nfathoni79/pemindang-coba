@@ -11,6 +11,11 @@ if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
+def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
+if (flutterMinSdkVersion == null) {
+    flutterMinSdkVersion = '16'
+}
+
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
@@ -48,7 +53,7 @@ android {
         applicationId "id.perindo.pemindang_coba"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion flutterMinSdkVersion.toInteger()
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -59,6 +64,36 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+        }
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        local {
+            dimension "default"
+            resValue "string", "app_name", "P Bisnis Loc"
+            applicationIdSuffix ".local"
+            versionNameSuffix "-local"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_local"
+            ]
+        }
+        dev {
+            dimension "default"
+            resValue "string", "app_name", "P Bisnis Dev"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher_dev"
+            ]
+        }
+        prod {
+            dimension "default"
+            resValue "string", "app_name", "P Bisnis"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher"
+            ]
         }
     }
 }
